@@ -1,0 +1,13 @@
+<resources>
+    <string name="baseUrl">http://localhost:8080</string>
+
+    <string name="logo">FitFoodie logotype</string>
+    <string name="appName">FitFoodie</string>
+    <string name="baseRegister">Зарегистрироваться</string>
+    <string name="baseSign">Авторизация</string>
+    <string name="mail">Почта</string>
+    <string name="password">Пароль</string>
+    <string name="actionSign">Авторизоваться</string>
+    <string name="actionRegister">Зарегистрироваться</string>
+    <string name="name">Имя</string>
+</resources>

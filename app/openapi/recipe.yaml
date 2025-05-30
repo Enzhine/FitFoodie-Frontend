@@ -1,0 +1,309 @@
+openapi: 3.0.0
+info:
+  title: Recipe API
+  description: Полнофункциональный API для управления рецептами с системой аутентификации и пищевыми предпочтениями
+  version: 2.0.1
+
+paths:
+  /auth/register:
+    post:
+      summary: Регистрация пользователя
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegisterRequest'
+      responses:
+        '201':
+          description: Успешная регистрация
+        '400':
+          description: Некорректные данные
+
+  /auth/login:
+    post:
+      summary: Авторизация пользователя
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+      responses:
+        '200':
+          description: Успешная авторизация
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token:
+                    type: string
+                    example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+
+  /users/me:
+    get:
+      summary: Информация о текущем пользователе
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Успешный запрос
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserDto'
+
+  /users/preferences:
+    patch:
+      summary: Обновить пищевые предпочтения
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PreferencesUpdate'
+      responses:
+        '200':
+          description: Предпочтения обновлены
+
+  /products:
+    get:
+      summary: Получить все продукты
+      responses:
+        '200':
+          description: Список продуктов
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ProductDto'
+
+  /dishes:
+    get:
+      summary: Поиск блюд с фильтрами
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: query
+          name: search
+          schema: { type: string }
+          description: Поиск по названию
+        - in: query
+          name: minCalories
+          schema: { type: number }
+          description: Минимальная калорийность
+        - in: query
+          name: maxCalories
+          schema: { type: number }
+          description: Максимальная калорийность
+        - in: query
+          name: minCookingTime
+          schema: { type: integer }
+          description: Минимальное время готовки (минуты)
+        - in: query
+          name: maxCookingTime
+          schema: { type: integer }
+          description: Максимальное время готовки (минуты)
+        - in: query
+          name: page
+          schema: { type: integer, default: 0 }
+        - in: query
+          name: size
+          schema: { type: integer, default: 20 }
+      responses:
+        '200':
+          description: Отфильтрованный список
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PagedDishes'
+
+  /dishes/suggest:
+    post:
+      summary: Подобрать блюда по продуктам
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SuggestRequest'
+      responses:
+        '200':
+          description: Список подходящих блюд
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/DishInfoDto'
+
+  /dishes/{id}:
+    get:
+      summary: Полная информация о блюде
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: integer }
+      responses:
+        '200':
+          description: Детальная информация
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DishInfoDto'
+        '404':
+          description: Блюдо не найдено
+
+  /dishes/{id}/products:
+    get:
+      summary: Продукты для блюда
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: integer }
+      responses:
+        '200':
+          description: Список продуктов
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ProductQuantityDto'
+
+  /dishes/{id}/image:
+    get:
+      summary: Получить изображение блюда
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: integer }
+      responses:
+        '200':
+          description: Изображение в оригинальном формате
+          content:
+            image/*: {}
+        '404':
+          description: Изображение не найдено
+
+components:
+  schemas:
+    ProductDto:
+      type: object
+      properties:
+        id: { type: integer }
+        name: { type: string }
+        unit:
+          type: string
+          enum: [g, ml, items, tsp, tbsp]
+
+    DishInfoDto:
+      type: object
+      properties:
+        id: { type: integer }
+        name: { type: string }
+        calories: { type: number }
+        cookingTime: { type: integer }
+        imageUrl: { type: string }
+        recipe: { type: string }
+        chefAdvice: { type: string }
+
+    ProductQuantityDto:
+      type: object
+      properties:
+        productId: { type: integer }
+        productName: { type: string }
+        quantity: { type: number }
+        unit: { type: string }
+
+    UserDto:
+      type: object
+      properties:
+        id: { type: integer }
+        username: { type: string }
+        email: { type: string }
+        meatPreference:
+          type: integer
+          enum: [0, 1, 2]
+          description: |
+            0 - Не ест мясо совсем
+            1 - Ест мясо редко
+            2 - Любит мясо
+        fishPreference:
+          type: integer
+          enum: [0, 1, 2]
+          description: |
+            0 - Не ест рыбу совсем
+            1 - Ест рыбу редко
+            2 - Любит рыбу
+        milkPreference:
+          type: integer
+          enum: [0, 1, 2]
+          description: |
+            0 - Не употребляет молочное
+            1 - Употребляет редко
+            2 - Любит молочное
+
+    PreferencesUpdate:
+      type: object
+      properties:
+        meatPreference:
+          type: integer
+          enum: [0, 1, 2]
+          example: 2
+        fishPreference:
+          type: integer
+          enum: [0, 1, 2]
+          example: 1
+        milkPreference:
+          type: integer
+          enum: [0, 1, 2]
+          example: 0
+
+    SuggestRequest:
+      type: object
+      properties:
+        productIds:
+          type: array
+          items: { type: integer }
+
+    PagedDishes:
+      type: object
+      properties:
+        content:
+          type: array
+          items: { $ref: '#/components/schemas/DishInfoDto' }
+        totalPages: { type: integer }
+        totalElements: { type: integer }
+        pageNumber: { type: integer }
+        pageSize: { type: integer }
+
+    RegisterRequest:
+      type: object
+      required: [username, email, password]
+      properties:
+        username: { type: string }
+        email: { type: string, format: email }
+        password: { type: string, minLength: 8 }
+
+    LoginRequest:
+      type: object
+      required: [login, password]
+      properties:
+        login: { type: string }
+        password: { type: string }
+
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

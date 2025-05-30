@@ -1,0 +1,29 @@
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    app:startDestination="@id/startFragment">
+    <fragment
+        android:id="@+id/startFragment"
+        android:name="ru.kotlix.fitfoodie.presentation.view.StartFragment"
+        android:label="Start Fragment"
+        tools:layout="@layout/fragment_start">
+        <action
+            android:id="@+id/action_startFragment_loginFragment"
+            app:destination="@id/loginFragment" />
+        <action
+            android:id="@+id/action_startFragment_registerFragment"
+            app:destination="@id/registerFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/loginFragment"
+        android:name="ru.kotlix.fitfoodie.presentation.view.LoginFragment"
+        android:label="Login Fragment"
+        tools:layout="@layout/fragment_login">
+    </fragment>
+    <fragment
+        android:id="@+id/registerFragment"
+        android:name="ru.kotlix.fitfoodie.presentation.view.RegisterFragment"
+        android:label="Register Fragment"
+        tools:layout="@layout/fragment_register">
+    </fragment>
+</navigation>
