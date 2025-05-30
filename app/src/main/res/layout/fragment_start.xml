@@ -10,8 +10,8 @@
     <!-- Логотип – заменяется на ImageView если нужно -->
     <ImageView
         android:id="@+id/logoImage"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
         android:contentDescription="@string/logo"
         android:src="@drawable/logo" />
 

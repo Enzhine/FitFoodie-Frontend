@@ -15,6 +15,7 @@
         tools:targetApi="31">
         <activity
             android:name="ru.kotlix.fitfoodie.MainActivity"
+            android:screenOrientation="portrait"
             android:exported="true"
             android:theme="@style/Theme.FitFoodie">
             <intent-filter>

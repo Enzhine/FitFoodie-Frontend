@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="fitfoodie_blue">#00BCD4</color>
-    <color name="fitfoodie_gray">#EFEFEF</color>
+    <color name="fitfoodie_gray">#DEDEDE</color>
+    <color name="fitfoodie_gray_translucent">#EAFFFFFF</color>
 
     <color name="white">#FFFFFF</color>
     <color name="black">#000000</color>

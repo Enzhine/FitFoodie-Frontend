@@ -13,6 +13,7 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import ru.kotlix.fitfoodie.api.DefaultApi
 import ru.kotlix.fitfoodie.api.dto.RegisterRequest
+import ru.kotlix.fitfoodie.presentation.state.LoginState
 import ru.kotlix.fitfoodie.presentation.state.RegistrationState
 import javax.inject.Inject
 
@@ -21,28 +22,33 @@ class RegisterFragmentViewModel @Inject constructor(
     private val defaultApi: DefaultApi
 ) : ViewModel() {
 
+    private val hasSubmitted = MutableStateFlow(false)
     val regState = MutableStateFlow<RegistrationState>(RegistrationState.Idle)
 
     val name = MutableStateFlow("")
     val email = MutableStateFlow("")
     val password = MutableStateFlow("")
 
-    val nameError: StateFlow<String?> = name
-        .map {
-            if (it.isBlank()) "Имя не может быть пустое"
-            else if (it.length < 2) "Имя не может быть короче двух букв"
-            else if (it.length > 32) "Имя не может быть длинне 32 букв"
-            else null
-        }
-        .stateIn(viewModelScope, SharingStarted.Eagerly, null)
+    val nameError: StateFlow<String?> = combine(hasSubmitted, name) { submit, name ->
+        if (!submit) null
+        else if (name.isBlank()) "Имя не может быть пустое"
+        else if (!Regex("^[0-9\\p{L}]+$").matches(name)) "Имя может содержать только буквы и цифры"
+        else if (name.length < 2) "Имя не может быть короче двух букв"
+        else if (name.length > 32) "Имя не может быть длинне 32 букв"
+        else null
+    }.stateIn(viewModelScope, SharingStarted.Eagerly, null)
 
-    val emailError: StateFlow<String?> = email
-        .map { if (!Patterns.EMAIL_ADDRESS.matcher(it).matches()) "Неверный e-mail" else null }
-        .stateIn(viewModelScope, SharingStarted.Eagerly, null)
+    val emailError: StateFlow<String?> = combine(hasSubmitted, email) { submit, email ->
+        if (!submit) null
+        else if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) "Неверный e-mail"
+        else null
+    }.stateIn(viewModelScope, SharingStarted.Eagerly, null)
 
-    val passwordError: StateFlow<String?> = password
-        .map { if (it.length < 6) "Минимум 6 символов" else null }
-        .stateIn(viewModelScope, SharingStarted.Eagerly, null)
+    val passwordError: StateFlow<String?> = combine(hasSubmitted, password) { submit, pass ->
+        if (!submit) null
+        else if (pass.length < 6) "Минимум 6 символов"
+        else null
+    }.stateIn(viewModelScope, SharingStarted.Eagerly, null)
 
     val isFormValid: StateFlow<Boolean> = combine(
         nameError, emailError, passwordError
@@ -50,10 +56,13 @@ class RegisterFragmentViewModel @Inject constructor(
         .stateIn(viewModelScope, SharingStarted.Eagerly, false)
 
     fun register() {
-        viewModelScope.launch {
-            if (!isFormValid.value) return@launch
+        if (regState.value == RegistrationState.Loading) return
 
-            regState.value = RegistrationState.Loading
+        hasSubmitted.value = true
+        if (!isFormValid.value) return
+        regState.value = RegistrationState.Loading
+
+        viewModelScope.launch {
             try {
                 val response = defaultApi.authRegisterPost(
                     RegisterRequest(
@@ -64,7 +73,7 @@ class RegisterFragmentViewModel @Inject constructor(
                 )
                 if (response.isSuccessful) {
                     regState.value = RegistrationState.Success
-                }else {
+                } else {
                     regState.value = RegistrationState.Error("Error ${response.code()}")
                 }
             } catch (t: Throwable) {

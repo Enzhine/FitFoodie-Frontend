@@ -3,12 +3,14 @@ package ru.kotlix.fitfoodie.presentation.view
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast.LENGTH_SHORT
+import androidx.activity.OnBackPressedCallback
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -21,11 +23,18 @@ import ru.kotlix.fitfoodie.presentation.viewmodel.RegisterFragmentViewModel
 class RegisterFragment : Fragment(R.layout.fragment_register) {
     private var _b: FragmentRegisterBinding? = null
     private val b get() = _b!!
+    private lateinit var backCallback: OnBackPressedCallback
 
     private val vm: RegisterFragmentViewModel by viewModels()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         _b = FragmentRegisterBinding.bind(view)
+
+        backCallback = object : OnBackPressedCallback(false) {
+            override fun handleOnBackPressed() {}
+        }
+        requireActivity().onBackPressedDispatcher
+            .addCallback(viewLifecycleOwner, backCallback)
 
         b.etName.doAfterTextChanged { vm.name.value = it.toString() }
         b.etMail.doAfterTextChanged { vm.email.value = it.toString() }
@@ -39,13 +48,22 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
     private suspend fun registerErrorCallbacks() =
         viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
             launch {
-                vm.nameError.collect { b.tilName.error = it }
+                vm.nameError.collect {
+                    b.tilName.error = it
+                    b.tilName.isErrorEnabled = it != null
+                }
             }
             launch {
-                vm.emailError.collect { b.tilMail.error = it }
+                vm.emailError.collect {
+                    b.tilMail.error = it
+                    b.tilMail.isErrorEnabled = it != null
+                }
             }
             launch {
-                vm.passwordError.collect { b.tilPassword.error = it }
+                vm.passwordError.collect {
+                    b.tilPassword.error = it
+                    b.tilPassword.isErrorEnabled = it != null
+                }
             }
             launch {
                 vm.isFormValid.collect { b.btnRegisterSubmit.isEnabled = it }
@@ -53,17 +71,26 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
             launch {
                 vm.regState.collect { state ->
                     when (state) {
-                        is RegistrationState.Loading ->
-                            b.progressBar.visibility = View.VISIBLE
+                        is RegistrationState.Loading -> {
+                            b.blockingOverlay.visibility = View.VISIBLE
+                            backCallback.isEnabled = true
+                        }
 
                         is RegistrationState.Success -> {
-                            b.progressBar.visibility = View.GONE
-                            // навигация дальше
+                            b.blockingOverlay.visibility = View.GONE
+                            backCallback.isEnabled = false
+
+                            findNavController().navigate(
+                                R.id.action_startFragment_loginFragment
+                            )
                         }
 
                         is RegistrationState.Error -> {
-                            b.progressBar.visibility = View.GONE
-                            Snackbar.make(b.root, state.message ?: "Ошибка", Snackbar.LENGTH_SHORT).show()
+                            b.blockingOverlay.visibility = View.GONE
+                            backCallback.isEnabled = false
+
+                            Snackbar.make(b.root, state.message ?: "Ошибка", Snackbar.LENGTH_SHORT)
+                                .show()
                         }
 
                         else -> Unit
