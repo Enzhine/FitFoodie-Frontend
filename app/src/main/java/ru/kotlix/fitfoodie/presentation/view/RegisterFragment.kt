@@ -10,7 +10,9 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.navOptions
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -80,8 +82,23 @@ class RegisterFragment : Fragment(R.layout.fragment_register) {
                             b.blockingOverlay.visibility = View.GONE
                             backCallback.isEnabled = false
 
+                            val action = RegisterFragmentDirections
+                                .actionRegisterFragmentLoginFragment().apply {
+                                    email = b.etMail.text.toString()
+                                }
+
+                            val options = navOptions {
+                                anim {
+                                    enter = R.anim.slide_in_right
+                                    exit = R.anim.slide_out_left
+                                    popEnter = R.anim.slide_in_left
+                                    popExit = R.anim.slide_out_right
+                                }
+                                popUpTo(R.id.registerFragment) { inclusive = true }
+                            }
                             findNavController().navigate(
-                                R.id.action_startFragment_loginFragment
+                                action,
+                                options
                             )
                         }
 

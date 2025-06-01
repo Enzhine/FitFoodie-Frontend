@@ -1,5 +1,6 @@
 package ru.kotlix.fitfoodie.presentation.viewmodel
 
+import android.util.Log
 import android.util.Patterns
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -10,16 +11,24 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import org.openapitools.client.infrastructure.ApiClient
 import ru.kotlix.fitfoodie.api.DefaultApi
 import ru.kotlix.fitfoodie.api.dto.LoginRequest
-import ru.kotlix.fitfoodie.api.dto.RegisterRequest
+import ru.kotlix.fitfoodie.domain.service.TokenStorage
+import ru.kotlix.fitfoodie.domain.service.UserCredentialsStorage
+import ru.kotlix.fitfoodie.domain.service.UserPreferencesStorage
+import ru.kotlix.fitfoodie.mapper.toUserCredentials
+import ru.kotlix.fitfoodie.mapper.toUserPreferences
 import ru.kotlix.fitfoodie.presentation.state.LoginState
-import ru.kotlix.fitfoodie.presentation.state.RegistrationState
 import javax.inject.Inject
 
 @HiltViewModel
 class LoginFragmentViewModel @Inject constructor(
-    private val defaultApi: DefaultApi
+    private val apiClient: ApiClient,
+    private val defaultApi: DefaultApi,
+    private val tokenStorage: TokenStorage,
+    private val userCredentialsStorage: UserCredentialsStorage,
+    private val userPreferencesStorage: UserPreferencesStorage
 ) : ViewModel() {
     private val hasSubmitted = MutableStateFlow(false)
     val loginState = MutableStateFlow<LoginState>(LoginState.Idle)
@@ -53,20 +62,44 @@ class LoginFragmentViewModel @Inject constructor(
 
         viewModelScope.launch {
             try {
-                val response = defaultApi.authLoginPost(
+                val responseLogin = defaultApi.authLogin(
                     LoginRequest(
                         password = password.value,
-                        login = email.value
+                        email = email.value
                     )
                 )
-                if (response.isSuccessful) {
-                    loginState.value = LoginState.Success
-                } else {
-                    loginState.value = LoginState.Error("Error ${response.code()}")
+                if (!responseLogin.isSuccessful) {
+                    throw IllegalArgumentException("TokenFetch: error ${responseLogin.code()}")
                 }
+
+                val responseLoginBody = responseLogin.body()
+                    ?: throw IllegalArgumentException("TokenFetch: empty response")
+
+                apiClient.setBearerToken(responseLoginBody.token)
+                fetchCredentials()
+                tokenStorage.save(responseLoginBody.token)
+
+                loginState.value = LoginState.Success
             } catch (t: Throwable) {
+                Log.e(this::class.toString(), t.message, t)
                 loginState.value = LoginState.Error(t.message)
             }
         }
+    }
+
+    private suspend fun fetchCredentials() {
+        val response = defaultApi.usersMe()
+        if (!response.isSuccessful) {
+            throw IllegalArgumentException("UserFetch: error ${response.code()}")
+        }
+
+        val responseBody = response.body()
+            ?: throw IllegalArgumentException("UserFetch: empty response")
+
+        val userCredentials = responseBody.toUserCredentials()
+        val userPreferences = responseBody.toUserPreferences()
+
+        userCredentialsStorage.save(userCredentials)
+        userPreferencesStorage.save(userCredentials.id, userPreferences)
     }
 }

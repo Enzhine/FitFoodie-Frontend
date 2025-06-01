@@ -1,5 +1,5 @@
 <resources>
-    <string name="baseUrl">http://localhost:8080</string>
+    <string name="baseUrl">http://192.168.1.65:5000</string>
 
     <string name="logo">FitFoodie logotype</string>
     <string name="appName">FitFoodie</string>
@@ -10,4 +10,29 @@
     <string name="actionSign">Авторизоваться</string>
     <string name="actionRegister">Зарегистрироваться</string>
     <string name="name">Имя</string>
+    <string name="welcomeUser">Привет, %1$s</string>
+    <string name="findDish">Подобрать блюдо</string>
+    <string name="calculateProduct">Рассчитать продукты</string>
+    <string name="products">Продукты</string>
+    <string name="home">Домой</string>
+    <string name="profile">Профиль</string>
+    <string name="ad">Реклама</string>
+    <string name="foodPreferences">Предпочтения категорий</string>
+    <string name="preferencesType">Тип</string>
+    <string name="preferencesEat">Люблю</string>
+    <string name="preferencesNotLike">Редко</string>
+    <string name="preferencesNotEat">Искл.</string>
+    <string name="preferencesMeat">Мясо</string>
+    <string name="preferencesFish">Рыба</string>
+    <string name="preferencesMilk">Молоко</string>
+    <string name="prefsCategoryHelp">Люблю\n - содержащие продукты и блюда получают высокий приоритет.\nРедко\n - содержащие продукты и блюда получают низкий приоритет.\nИсключить\n - содержащие продукты и блюда не отображаются.
+    </string>
+    <string name="Details">Подробнее</string>
+    <string name="prefsTodo">Мы работаем над расширением предпочтений...</string>
+    <string name="search">Поиск</string>
+    <string name="tabProducts">Ваши продукты</string>
+    <string name="authRequired">Требуется авторизация.</string>
+    <string name="leaveProfile">Выйти</string>
+    <string name="retryLeave">Повторите действие.</string>
+    <string name="profileName">Профиль: %1$s</string>
 </resources>

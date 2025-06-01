@@ -16,6 +16,8 @@ moshi = "1.15.1"
 okhttp3 = "4.12.0"
 retrofit = "2.11.0"
 retrofit2KotlinxSerializationConverter = "1.0.0"
+# datastore
+datastore = "1.1.7"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -38,11 +40,14 @@ okhttp3-logging = { module = "com.squareup.okhttp3:logging-interceptor", version
 retrofit2-converter-moshi = { module = "com.squareup.retrofit2:converter-moshi", version.ref = "retrofit" }
 retrofit2-converter-scalars = { module = "com.squareup.retrofit2:converter-scalars", version.ref = "retrofit" }
 retrofit2-kotlinx-serialization-converter = { module = "com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter", version.ref = "retrofit2KotlinxSerializationConverter" }
+# datastore
+datastore = { module = "androidx.datastore:datastore-preferences", version.ref = "datastore" }
+
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 # custom
 hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt-version" }
-openapiGenerator = {id = "org.openapi.generator", version.ref = "openapiGenerator"}
+openapiGenerator = { id = "org.openapi.generator", version.ref = "openapiGenerator" }
 androidx-navigation-safeargs = { id = "androidx.navigation.safeargs", version.ref = "navigationUiKtx" }

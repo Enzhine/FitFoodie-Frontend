@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/cardProduct"
+    android:layout_width="match_parent"
+    android:layout_height="150dp"
+    android:layout_marginBottom="12dp"
+    app:cardCornerRadius="32dp"
+    app:cardPreventCornerOverlap="false"
+    app:cardUseCompatPadding="true">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/productsItemImage"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/ic_launcher_background"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <View
+            android:id="@+id/productsItemOverlay"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="#80000000"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/productsItemName"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:text="Product"
+            android:textColor="@android:color/white"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <!-- 4) Текущий запас (например, "5 шт.") -->
+        <TextView
+            android:id="@+id/productsItemQuantity"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:text="Quantity"
+            android:textColor="@android:color/white"
+            android:textSize="14sp"
+            app:layout_constraintStart_toStartOf="@id/productsItemName"
+            app:layout_constraintTop_toBottomOf="@id/productsItemName" />
+
+        <LinearLayout
+            android:id="@+id/productsItemControls"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:layout_marginEnd="16dp"
+            android:orientation="vertical"
+            android:padding="8dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <!-- 5.1) Кнопка «+» -->
+            <ImageButton
+                android:id="@+id/productsItemBtnInc"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:background="@drawable/secondary_container_bg"
+                android:backgroundTint="@color/white"
+                android:padding="4dp"
+                android:scaleType="centerInside"
+                android:src="@drawable/ic_plus"
+                app:tint="@color/black" />
+
+            <!-- 5.2) Текущая выбранная единица (например, "1 шт.") -->
+            <TextView
+                android:id="@+id/productsItemQuant"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:layout_marginBottom="4dp"
+                android:gravity="center"
+                android:text="Quant"
+                android:textColor="@color/white"
+                android:textSize="14sp" />
+
+            <!-- 5.3) Кнопка «–» -->
+            <ImageButton
+                android:id="@+id/productsItemBtnDec"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:background="@drawable/secondary_container_bg"
+                android:backgroundTint="@color/white"
+                android:padding="4dp"
+                android:scaleType="centerInside"
+                android:src="@drawable/ic_minus"
+                app:tint="@color/black" />
+        </LinearLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</com.google.android.material.card.MaterialCardView>

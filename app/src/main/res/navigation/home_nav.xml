@@ -1,0 +1,23 @@
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    app:startDestination="@id/homeFragment">
+    <fragment
+        android:id="@+id/productsFragment"
+        android:name="ru.kotlix.fitfoodie.presentation.view.ProductsFragment"
+        android:label="Products Fragment"
+        tools:layout="@layout/fragment_products">
+    </fragment>
+    <fragment
+        android:id="@+id/homeFragment"
+        android:name="ru.kotlix.fitfoodie.presentation.view.HomeFragment"
+        android:label="Home Fragment"
+        tools:layout="@layout/fragment_home">
+    </fragment>
+    <fragment
+        android:id="@+id/prefsFragment"
+        android:name="ru.kotlix.fitfoodie.presentation.view.PrefsFragment"
+        android:label="Preferences Fragment"
+        tools:layout="@layout/fragment_prefs">
+    </fragment>
+</navigation>

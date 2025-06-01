@@ -1,5 +1,6 @@
 package ru.kotlix.fitfoodie.presentation.viewmodel
 
+import android.util.Log
 import android.util.Patterns
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -64,7 +65,7 @@ class RegisterFragmentViewModel @Inject constructor(
 
         viewModelScope.launch {
             try {
-                val response = defaultApi.authRegisterPost(
+                val response = defaultApi.authRegister(
                     RegisterRequest(
                         username = name.value,
                         email = email.value,
@@ -77,6 +78,7 @@ class RegisterFragmentViewModel @Inject constructor(
                     regState.value = RegistrationState.Error("Error ${response.code()}")
                 }
             } catch (t: Throwable) {
+                Log.e(this::class.toString(), t.message, t)
                 regState.value = RegistrationState.Error(t.message)
             }
         }

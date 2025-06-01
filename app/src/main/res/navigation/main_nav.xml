@@ -23,15 +23,30 @@
             app:popExitAnim="@anim/slide_out_right"/>
     </fragment>
     <fragment
-        android:id="@+id/loginFragment"
-        android:name="ru.kotlix.fitfoodie.presentation.view.LoginFragment"
-        android:label="Login Fragment"
-        tools:layout="@layout/fragment_login">
-    </fragment>
-    <fragment
         android:id="@+id/registerFragment"
         android:name="ru.kotlix.fitfoodie.presentation.view.RegisterFragment"
         android:label="Register Fragment"
         tools:layout="@layout/fragment_register">
+        <action
+            android:id="@+id/action_registerFragment_loginFragment"
+            app:destination="@id/loginFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+    </fragment>
+    <fragment
+        android:id="@+id/loginFragment"
+        android:name="ru.kotlix.fitfoodie.presentation.view.LoginFragment"
+        android:label="Login Fragment"
+        tools:layout="@layout/fragment_login">
+        <argument
+            android:name="email"
+            app:argType="string"
+            android:defaultValue="" />
+        <argument
+            android:name="password"
+            app:argType="string"
+            android:defaultValue="" />
     </fragment>
 </navigation>

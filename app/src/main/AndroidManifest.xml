@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:name=".App"
         android:allowBackup="true"
@@ -12,11 +14,12 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.FitFoodie"
+        android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
-            android:name="ru.kotlix.fitfoodie.MainActivity"
-            android:screenOrientation="portrait"
+            android:name="ru.kotlix.fitfoodie.presentation.view.MainActivity"
             android:exported="true"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.FitFoodie">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -24,5 +27,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".presentation.view.HomeActivity"
+            android:screenOrientation="portrait" />
     </application>
 </manifest>

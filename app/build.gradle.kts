@@ -68,6 +68,8 @@ dependencies {
     implementation(libs.retrofit2.kotlinx.serialization.converter)
     implementation(libs.retrofit2.converter.moshi)
     implementation(libs.retrofit2.converter.scalars)
+    // datastore
+    implementation(libs.datastore)
 }
 
 kapt {

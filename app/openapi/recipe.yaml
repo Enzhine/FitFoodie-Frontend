@@ -3,10 +3,13 @@ info:
   title: Recipe API
   description: Полнофункциональный API для управления рецептами с системой аутентификации и пищевыми предпочтениями
   version: 2.0.1
-
+security:
+  - BearerAuth: [ ]
 paths:
   /auth/register:
     post:
+      security: [ ]
+      operationId: authRegister
       summary: Регистрация пользователя
       requestBody:
         required: true
@@ -22,6 +25,8 @@ paths:
 
   /auth/login:
     post:
+      security: [ ]
+      operationId: authLogin
       summary: Авторизация пользователя
       requestBody:
         required: true
@@ -35,17 +40,12 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  token:
-                    type: string
-                    example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+                $ref: '#/components/schemas/LoginResponse'
 
   /users/me:
     get:
+      operationId: usersMe
       summary: Информация о текущем пользователе
-      security:
-        - bearerAuth: []
       responses:
         '200':
           description: Успешный запрос
@@ -56,9 +56,8 @@ paths:
 
   /users/preferences:
     patch:
+      operationId: usersPreferences
       summary: Обновить пищевые предпочтения
-      security:
-        - bearerAuth: []
       requestBody:
         required: true
         content:
@@ -71,6 +70,7 @@ paths:
 
   /products:
     get:
+      operationId: products
       summary: Получить все продукты
       responses:
         '200':
@@ -84,9 +84,8 @@ paths:
 
   /dishes:
     get:
+      operationId: dishesAll
       summary: Поиск блюд с фильтрами
-      security:
-        - bearerAuth: []
       parameters:
         - in: query
           name: search
@@ -124,9 +123,8 @@ paths:
 
   /dishes/suggest:
     post:
+      operationId: dishesSuggest
       summary: Подобрать блюда по продуктам
-      security:
-        - bearerAuth: []
       requestBody:
         required: true
         content:
@@ -145,6 +143,7 @@ paths:
 
   /dishes/{id}:
     get:
+      operationId: dish
       summary: Полная информация о блюде
       parameters:
         - in: path
@@ -163,6 +162,7 @@ paths:
 
   /dishes/{id}/products:
     get:
+      operationId: dishProducts
       summary: Продукты для блюда
       parameters:
         - in: path
@@ -181,6 +181,8 @@ paths:
 
   /dishes/{id}/image:
     get:
+      security: [ ]
+      operationId: dishImage
       summary: Получить изображение блюда
       parameters:
         - in: path
@@ -191,12 +193,21 @@ paths:
         '200':
           description: Изображение в оригинальном формате
           content:
-            image/*: {}
+            image/*: { }
         '404':
           description: Изображение не найдено
 
 components:
   schemas:
+    LoginResponse:
+      type: object
+      required:
+        - token
+      properties:
+        token:
+          type: string
+          example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+
     ProductDto:
       type: object
       properties:
@@ -204,7 +215,7 @@ components:
         name: { type: string }
         unit:
           type: string
-          enum: [g, ml, items, tsp, tbsp]
+          enum: [ g, ml, items, tsp, tbsp ]
 
     DishInfoDto:
       type: object
@@ -227,47 +238,57 @@ components:
 
     UserDto:
       type: object
+      required:
+        - id
+        - username
+        - email
+        - meatPreference
+        - fishPreference
+        - milkPreference
       properties:
         id: { type: integer }
         username: { type: string }
         email: { type: string }
         meatPreference:
-          type: integer
-          enum: [0, 1, 2]
-          description: |
-            0 - Не ест мясо совсем
-            1 - Ест мясо редко
-            2 - Любит мясо
+          type: string
+          enum:
+            - 'LIKE'
+            - 'RARE'
+            - 'EXCL'
         fishPreference:
-          type: integer
-          enum: [0, 1, 2]
-          description: |
-            0 - Не ест рыбу совсем
-            1 - Ест рыбу редко
-            2 - Любит рыбу
+          type: string
+          enum:
+            - 'LIKE'
+            - 'RARE'
+            - 'EXCL'
         milkPreference:
-          type: integer
-          enum: [0, 1, 2]
-          description: |
-            0 - Не употребляет молочное
-            1 - Употребляет редко
-            2 - Любит молочное
+          type: string
+          enum:
+            - 'LIKE'
+            - 'RARE'
+            - 'EXCL'
 
     PreferencesUpdate:
       type: object
       properties:
         meatPreference:
-          type: integer
-          enum: [0, 1, 2]
-          example: 2
+          type: string
+          enum:
+            - 'LIKE'
+            - 'RARE'
+            - 'EXCL'
         fishPreference:
-          type: integer
-          enum: [0, 1, 2]
-          example: 1
+          type: string
+          enum:
+            - 'LIKE'
+            - 'RARE'
+            - 'EXCL'
         milkPreference:
-          type: integer
-          enum: [0, 1, 2]
-          example: 0
+          type: string
+          enum:
+            - 'LIKE'
+            - 'RARE'
+            - 'EXCL'
 
     SuggestRequest:
       type: object
@@ -289,7 +310,7 @@ components:
 
     RegisterRequest:
       type: object
-      required: [username, email, password]
+      required: [ username, email, password ]
       properties:
         username: { type: string }
         email: { type: string, format: email }
@@ -297,9 +318,9 @@ components:
 
     LoginRequest:
       type: object
-      required: [login, password]
+      required: [ login, password ]
       properties:
-        login: { type: string }
+        email: { type: string }
         password: { type: string }
 
   securitySchemes:
