@@ -11,7 +11,6 @@ import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.openapitools.client.infrastructure.ApiClient
-import retrofit2.Retrofit
 import ru.kotlix.fitfoodie.R
 import javax.inject.Singleton
 import ru.kotlix.fitfoodie.api.DefaultApi

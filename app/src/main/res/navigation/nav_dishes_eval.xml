@@ -1,0 +1,40 @@
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    app:startDestination="@id/productsDishesEvalFragment">
+    <fragment
+        android:id="@+id/productsDishesEvalFragment"
+        android:name="ru.kotlix.fitfoodie.presentation.view.ProductsDEFragment"
+        android:label="Products Fragment"
+        tools:layout="@layout/fragment_products_dishes_eval">
+        <action
+            android:id="@+id/action_productsDishesEvalFragment_dishesFragment"
+            app:destination="@id/dishesFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+    </fragment>
+    <fragment
+        android:id="@+id/dishesFragment"
+        android:name="ru.kotlix.fitfoodie.presentation.view.DishesFragment"
+        android:label="Dishes Fragment"
+        tools:layout="@layout/fragment_dishes">
+        <action
+            android:id="@+id/action_dishesFragment_dishFragment"
+            app:destination="@id/dishFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+    </fragment>
+    <fragment
+        android:id="@+id/dishFragment"
+        android:name="ru.kotlix.fitfoodie.presentation.view.DishFragment"
+        android:label="Dish Fragment"
+        tools:layout="@layout/fragment_dish">
+        <argument
+            android:name="id"
+            app:argType="integer" />
+    </fragment>
+</navigation>

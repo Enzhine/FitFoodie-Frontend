@@ -26,15 +26,8 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         _b = FragmentHomeBinding.bind(view)
 
-        b.btnFindRecipe.setOnClickListener {
-            // TODO()
-            Snackbar.make(b.root, "b.btnFindRecipe.setOnClickListener", Snackbar.LENGTH_SHORT).show()
-        }
-
-        b.btnCalcProducts.setOnClickListener {
-            // TODO()
-            Snackbar.make(b.root, "b.btnCalcProducts.setOnClickListener", Snackbar.LENGTH_SHORT).show()
-        }
+        b.btnFindRecipe.setOnClickListener { navigateDishesEval() }
+        b.btnCalcProducts.setOnClickListener { navigateProductsCalc() }
 
         val backCallback = object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
@@ -56,5 +49,24 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
                 }
             }
         }
+    }
+
+    private fun navigateDishesEval() {
+        val activity = requireActivity()
+
+        val intent = Intent(activity, DishesEvalActivity::class.java)
+        startActivity(intent)
+    }
+
+    private fun navigateProductsCalc() {
+        val activity = requireActivity()
+
+        val intent = Intent(activity, ProductsCalcActivity::class.java)
+        startActivity(intent)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        _b = null
     }
 }

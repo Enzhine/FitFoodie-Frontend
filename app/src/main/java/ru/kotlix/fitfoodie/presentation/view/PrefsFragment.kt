@@ -11,6 +11,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import ru.kotlix.fitfoodie.R
 import ru.kotlix.fitfoodie.databinding.FragmentPrefsBinding
+import ru.kotlix.fitfoodie.domain.dto.UserPreferences
 import ru.kotlix.fitfoodie.presentation.viewmodel.PrefsFragmentViewModel
 
 @AndroidEntryPoint
@@ -44,12 +45,73 @@ class PrefsFragment : Fragment(R.layout.fragment_prefs) {
                 }
             }
         }
-
         b.prefsCategoryHelp.setOnClickListener {
             AlertDialog.Builder(requireContext())
                 .setMessage(getString(R.string.prefsCategoryHelp))
                 .setPositiveButton(android.R.string.ok, null)
                 .show()
+        }
+
+        lifecycleScope.launch {
+            vm.meatPreference.collect {
+                val idToSelect = when (it) {
+                    UserPreferences.ProductKind.LIKE -> b.prefsCategoryMeatRgLike.id
+                    UserPreferences.ProductKind.RARE -> b.prefsCategoryMeatRgRare.id
+                    UserPreferences.ProductKind.EXCL -> b.prefsCategoryMeatRgExcl.id
+                    null -> return@collect
+                }
+                b.prefsCategoryMeatRg.check(idToSelect)
+            }
+        }
+        lifecycleScope.launch {
+            vm.fishPreference.collect {
+                val idToSelect = when (it) {
+                    UserPreferences.ProductKind.LIKE -> b.prefsCategoryFishRgLike.id
+                    UserPreferences.ProductKind.RARE -> b.prefsCategoryFishRgRare.id
+                    UserPreferences.ProductKind.EXCL -> b.prefsCategoryFishRgExcl.id
+                    null -> return@collect
+                }
+                b.prefsCategoryFishRg.check(idToSelect)
+            }
+        }
+        lifecycleScope.launch {
+            vm.milkPreference.collect {
+                val idToSelect = when (it) {
+                    UserPreferences.ProductKind.LIKE -> b.prefsCategoryMilkRgLike.id
+                    UserPreferences.ProductKind.RARE -> b.prefsCategoryMilkRgRare.id
+                    UserPreferences.ProductKind.EXCL -> b.prefsCategoryMilkRgExcl.id
+                    null -> return@collect
+                }
+                b.prefsCategoryMilkRg.check(idToSelect)
+            }
+        }
+
+        b.prefsCategoryMeatRg.setOnCheckedChangeListener { group, checkedId ->
+            lifecycleScope.launch {
+                when (checkedId) {
+                    R.id.prefsCategoryMeatRgLike -> vm.setMeatPreference(UserPreferences.ProductKind.LIKE)
+                    R.id.prefsCategoryMeatRgRare -> vm.setMeatPreference(UserPreferences.ProductKind.RARE)
+                    R.id.prefsCategoryMeatRgExcl -> vm.setMeatPreference(UserPreferences.ProductKind.EXCL)
+                }
+            }
+        }
+        b.prefsCategoryFishRg.setOnCheckedChangeListener { group, checkedId ->
+            lifecycleScope.launch {
+                when (checkedId) {
+                    R.id.prefsCategoryFishRgLike -> vm.setFishPreference(UserPreferences.ProductKind.LIKE)
+                    R.id.prefsCategoryFishRgRare -> vm.setFishPreference(UserPreferences.ProductKind.RARE)
+                    R.id.prefsCategoryFishRgExcl -> vm.setFishPreference(UserPreferences.ProductKind.EXCL)
+                }
+            }
+        }
+        b.prefsCategoryMilkRg.setOnCheckedChangeListener { group, checkedId ->
+            lifecycleScope.launch {
+                when (checkedId) {
+                    R.id.prefsCategoryMilkRgLike -> vm.setMilkPreference(UserPreferences.ProductKind.LIKE)
+                    R.id.prefsCategoryMilkRgRare -> vm.setMilkPreference(UserPreferences.ProductKind.RARE)
+                    R.id.prefsCategoryMilkRgExcl -> vm.setMilkPreference(UserPreferences.ProductKind.EXCL)
+                }
+            }
         }
     }
 
@@ -59,5 +121,11 @@ class PrefsFragment : Fragment(R.layout.fragment_prefs) {
         val intent = Intent(activity, MainActivity::class.java)
         startActivity(intent)
         activity.finish()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        vm.syncPreferences()
+        _b = null
     }
 }

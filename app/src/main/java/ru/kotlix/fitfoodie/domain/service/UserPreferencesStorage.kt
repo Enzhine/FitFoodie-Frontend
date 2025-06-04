@@ -4,9 +4,9 @@ import kotlinx.coroutines.flow.Flow
 import ru.kotlix.fitfoodie.domain.dto.UserPreferences
 
 interface UserPreferencesStorage {
-    fun get(id: Int): Flow<UserPreferences?>
+    fun get(userId: Int? = null): Flow<UserPreferences?>
 
-    suspend fun save(id: Int, userPreferences: UserPreferences)
+    suspend fun save(userPreferences: UserPreferences, userId: Int? = null)
 
-    suspend fun remove(id: Int)
+    suspend fun remove(userId: Int? = null)
 }

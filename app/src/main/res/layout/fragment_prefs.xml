@@ -14,7 +14,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:menu="@menu/leave_menu"
+        app:menu="@menu/menu_leave"
         app:title="@string/profileName"
         app:titleTextAppearance="@style/TextAppearance.Widget.FitFoodie.Toolbar.Title"
         app:titleTextColor="@android:color/black" />

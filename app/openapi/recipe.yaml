@@ -82,6 +82,24 @@ paths:
                 items:
                   $ref: '#/components/schemas/ProductDto'
 
+  /products/{id}/image:
+    get:
+      security: [ ]
+      operationId: productImage
+      summary: Получить изображение продукта
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: integer }
+      responses:
+        '200':
+          description: Изображение в оригинальном формате
+          content:
+            image/*: { }
+        '404':
+          description: Изображение не найдено
+
   /dishes:
     get:
       operationId: dishesAll
@@ -139,7 +157,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/DishInfoDto'
+                  $ref: '#/components/schemas/DishDtoShort'
 
   /dishes/{id}:
     get:
@@ -156,7 +174,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/DishInfoDto'
+                $ref: '#/components/schemas/DishDtoFull'
         '404':
           description: Блюдо не найдено
 
@@ -210,31 +228,72 @@ components:
 
     ProductDto:
       type: object
+      required:
+        - id
+        - name
+        - quant
+        - unit
+        - tags
       properties:
         id: { type: integer }
         name: { type: string }
+        quant: { type: integer }
         unit:
           type: string
           enum: [ g, ml, items, tsp, tbsp ]
+        tags:
+          type: array
+          items: { type: string }
 
-    DishInfoDto:
+    DishDtoShort:
       type: object
+      required:
+        - id
+        - name
+        - calories
+        - cookMinutes
+        - tags
+        - order
       properties:
         id: { type: integer }
         name: { type: string }
         calories: { type: number }
-        cookingTime: { type: integer }
-        imageUrl: { type: string }
-        recipe: { type: string }
-        chefAdvice: { type: string }
+        cookMinutes: { type: integer }
+        order: { type: integer }
+        tags:
+          type: array
+          items: { type: string }
+
+    DishDtoFull:
+      allOf:
+        - $ref: '#/components/schemas/DishDtoShort'
+        - type: object
+          required:
+            - props
+            - recipe
+          properties:
+            props:
+              type: array
+              items:
+                type: object
+                required:
+                  - name
+                  - value
+                properties:
+                  name: { type: string }
+                  value: { type: string }
+            properties: { type: string }
+            recipe: { type: string }
+            chefAdvice: { type: string }
 
     ProductQuantityDto:
       type: object
+      required:
+        - productId
+        - quantity
       properties:
         productId: { type: integer }
-        productName: { type: string }
-        quantity: { type: number }
-        unit: { type: string }
+        quantity: { type: integer }
 
     UserDto:
       type: object
@@ -291,18 +350,16 @@ components:
             - 'EXCL'
 
     SuggestRequest:
-      type: object
-      properties:
-        productIds:
-          type: array
-          items: { type: integer }
+      type: array
+      items:
+        $ref: '#/components/schemas/ProductQuantityDto'
 
     PagedDishes:
       type: object
       properties:
         content:
           type: array
-          items: { $ref: '#/components/schemas/DishInfoDto' }
+          items: { $ref: '#/components/schemas/DishDtoShort' }
         totalPages: { type: integer }
         totalElements: { type: integer }
         pageNumber: { type: integer }

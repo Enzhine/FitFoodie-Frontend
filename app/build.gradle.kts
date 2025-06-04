@@ -70,6 +70,9 @@ dependencies {
     implementation(libs.retrofit2.converter.scalars)
     // datastore
     implementation(libs.datastore)
+    // images
+    implementation(libs.glide)
+    kapt(libs.glide.compiler)
 }
 
 kapt {

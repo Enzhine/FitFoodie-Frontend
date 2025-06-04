@@ -6,7 +6,7 @@
         android:id="@+id/productsFragment"
         android:name="ru.kotlix.fitfoodie.presentation.view.ProductsFragment"
         android:label="Products Fragment"
-        tools:layout="@layout/fragment_products">
+        tools:layout="@layout/fragment_dishes">
     </fragment>
     <fragment
         android:id="@+id/homeFragment"

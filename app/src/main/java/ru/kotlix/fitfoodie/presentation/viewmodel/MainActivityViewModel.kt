@@ -47,7 +47,7 @@ class MainActivityViewModel @Inject constructor(
             val userPreferences = responseBody.toUserPreferences()
 
             userCredentialsStorage.save(userCredentials)
-            userPreferencesStorage.save(userCredentials.id, userPreferences)
+            userPreferencesStorage.save(userPreferences)
 
             return PreauthState.OK
         } catch (ex: Exception) {

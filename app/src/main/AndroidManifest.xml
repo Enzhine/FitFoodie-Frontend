@@ -30,5 +30,11 @@
         <activity
             android:name=".presentation.view.HomeActivity"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".presentation.view.DishesEvalActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".presentation.view.ProductsCalcActivity"
+            android:screenOrientation="portrait" />
     </application>
 </manifest>

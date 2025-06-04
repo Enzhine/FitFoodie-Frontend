@@ -6,6 +6,7 @@ import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import ru.kotlix.fitfoodie.domain.datastore
 import ru.kotlix.fitfoodie.domain.dto.UserPreferences
@@ -13,7 +14,8 @@ import javax.inject.Inject
 
 class UserPreferencesStorageImpl @Inject constructor(
     @ApplicationContext
-    private val ctx: Context
+    private val ctx: Context,
+    private val userCredentialsStorage: UserCredentialsStorage
 ) : UserPreferencesStorage {
 
     private fun keyMeat(id: Int) =
@@ -25,12 +27,16 @@ class UserPreferencesStorageImpl @Inject constructor(
     private fun keyMilk(id: Int) =
         stringPreferencesKey("prefs_${id}_milk")
 
-    override fun get(id: Int): Flow<UserPreferences?> {
-        val keyMeat = keyMeat(id)
-        val keyFish = keyFish(id)
-        val keyMilk = keyMilk(id)
-
+    override fun get(userId: Int?): Flow<UserPreferences?> {
         return ctx.datastore.data.map { prefs ->
+            val id = userId
+                ?: userCredentialsStorage.get().first()?.id
+                ?: throw IllegalStateException("UserCredentials do not present.")
+
+            val keyMeat = keyMeat(id)
+            val keyFish = keyFish(id)
+            val keyMilk = keyMilk(id)
+
             val meat = prefs[keyMeat] ?: return@map null
             val fish = prefs[keyFish] ?: return@map null
             val milk = prefs[keyMilk] ?: return@map null
@@ -43,7 +49,11 @@ class UserPreferencesStorageImpl @Inject constructor(
         }
     }
 
-    override suspend fun save(id: Int, userPreferences: UserPreferences) {
+    override suspend fun save(userPreferences: UserPreferences, userId: Int?) {
+        val id = userId
+            ?: userCredentialsStorage.get().first()?.id
+            ?: throw IllegalStateException("UserCredentials do not present.")
+
         val keyMeat = keyMeat(id)
         val keyFish = keyFish(id)
         val keyMilk = keyMilk(id)
@@ -55,7 +65,11 @@ class UserPreferencesStorageImpl @Inject constructor(
         }
     }
 
-    override suspend fun remove(id: Int) {
+    override suspend fun remove(userId: Int?) {
+        val id = userId
+            ?: userCredentialsStorage.get().first()?.id
+            ?: throw IllegalStateException("UserCredentials do not present.")
+
         val keyMeat = keyMeat(id)
         val keyFish = keyFish(id)
         val keyMilk = keyMilk(id)

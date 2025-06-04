@@ -18,6 +18,8 @@ retrofit = "2.11.0"
 retrofit2KotlinxSerializationConverter = "1.0.0"
 # datastore
 datastore = "1.1.7"
+# images
+glide = "4.16.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -42,7 +44,9 @@ retrofit2-converter-scalars = { module = "com.squareup.retrofit2:converter-scala
 retrofit2-kotlinx-serialization-converter = { module = "com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter", version.ref = "retrofit2KotlinxSerializationConverter" }
 # datastore
 datastore = { module = "androidx.datastore:datastore-preferences", version.ref = "datastore" }
-
+# images
+glide = { module ="com.github.bumptech.glide:glide", version.ref = "glide" }
+glide-compiler = { module ="com.github.bumptech.glide:compiler", version.ref = "glide" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

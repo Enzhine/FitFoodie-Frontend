@@ -1,5 +1,7 @@
 <resources>
     <string name="baseUrl">http://192.168.1.65:5000</string>
+    <string name="baseUrlDishImage">http://192.168.1.65:5000/dishes/%1$s/image</string>
+    <string name="baseUrlProductImage">http://192.168.1.65:5000/products/%1$s/image</string>
 
     <string name="logo">FitFoodie logotype</string>
     <string name="appName">FitFoodie</string>
@@ -21,18 +23,34 @@
     <string name="preferencesType">Тип</string>
     <string name="preferencesEat">Люблю</string>
     <string name="preferencesNotLike">Редко</string>
-    <string name="preferencesNotEat">Искл.</string>
+    <string name="preferencesNotEat">Исключ.</string>
     <string name="preferencesMeat">Мясо</string>
     <string name="preferencesFish">Рыба</string>
     <string name="preferencesMilk">Молоко</string>
     <string name="prefsCategoryHelp">Люблю\n - содержащие продукты и блюда получают высокий приоритет.\nРедко\n - содержащие продукты и блюда получают низкий приоритет.\nИсключить\n - содержащие продукты и блюда не отображаются.
     </string>
     <string name="Details">Подробнее</string>
-    <string name="prefsTodo">Мы работаем над расширением предпочтений...</string>
     <string name="search">Поиск</string>
     <string name="tabProducts">Ваши продукты</string>
     <string name="authRequired">Требуется авторизация.</string>
     <string name="leaveProfile">Выйти</string>
     <string name="retryLeave">Повторите действие.</string>
     <string name="profileName">Профиль: %1$s</string>
+    <string name="search_products_hint">Название продукта</string>
+    <string name="search_title">Фильтр по названию</string>
+    <string name="btn_search">Найти</string>
+    <string name="btn_cancel">Отмена</string>
+    <string name="findDishAction">Подобрать</string>
+    <string name="tabDishes">Подобранные блюда</string>
+    <string name="search_dishes_hint">Название блюда</string>
+    <string name="details_dishes_calories">Число калорий</string>
+    <string name="details_dishes_minutes">Число минут</string>
+    <string name="details_dishes_title">Фильтр по свойствам</string>
+    <string name="dishProps">Характеристика</string>
+    <string name="dishRecipe">Рецепт</string>
+    <string name="dishChef">Совет от шефа</string>
+    <string name="tabDishesAll">Все блюда</string>
+    <string name="calcProductsAction">Рассчитать</string>
+    <string name="tabProductsRequired">Необходимые продукты</string>
+    <string name="productsCalcDishesNotSelected">Вы не выбрали блюда</string>
 </resources>

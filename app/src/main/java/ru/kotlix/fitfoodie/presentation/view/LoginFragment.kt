@@ -116,4 +116,9 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
         startActivity(intent)
         activity.finish()
     }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        _b = null
+    }
 }

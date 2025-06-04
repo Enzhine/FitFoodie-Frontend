@@ -14,13 +14,12 @@ import ru.kotlix.fitfoodie.presentation.state.PreauthState
 import ru.kotlix.fitfoodie.presentation.viewmodel.MainActivityViewModel
 
 @AndroidEntryPoint
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(R.layout.activity_main) {
 
     private val vm: MainActivityViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
 
         val rootView: View = findViewById(android.R.id.content)
 

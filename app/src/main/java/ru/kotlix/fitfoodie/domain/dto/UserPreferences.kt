@@ -1,9 +1,9 @@
 package ru.kotlix.fitfoodie.domain.dto
 
 data class UserPreferences(
-    val meat: ProductKind,
-    val fish: ProductKind,
-    val milk: ProductKind,
+    var meat: ProductKind,
+    var fish: ProductKind,
+    var milk: ProductKind,
 ) {
     enum class ProductKind {
         LIKE,
