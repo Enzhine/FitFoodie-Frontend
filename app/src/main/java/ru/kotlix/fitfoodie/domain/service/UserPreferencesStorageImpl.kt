@@ -6,6 +6,7 @@ import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import ru.kotlix.fitfoodie.domain.datastore
@@ -17,6 +18,12 @@ class UserPreferencesStorageImpl @Inject constructor(
     private val ctx: Context,
     private val userCredentialsStorage: UserCredentialsStorage
 ) : UserPreferencesStorage {
+
+    override var updated: MutableStateFlow<Boolean> = MutableStateFlow(true)
+
+    private fun notifyUpdate() {
+        updated.value = !updated.value
+    }
 
     private fun keyMeat(id: Int) =
         stringPreferencesKey("prefs_${id}_meat")
@@ -63,6 +70,8 @@ class UserPreferencesStorageImpl @Inject constructor(
             prefs[keyFish] = userPreferences.fish.name
             prefs[keyMilk] = userPreferences.milk.name
         }
+
+        notifyUpdate()
     }
 
     override suspend fun remove(userId: Int?) {
@@ -79,5 +88,7 @@ class UserPreferencesStorageImpl @Inject constructor(
             prefs.remove(keyFish)
             prefs.remove(keyMilk)
         }
+
+        notifyUpdate()
     }
 }

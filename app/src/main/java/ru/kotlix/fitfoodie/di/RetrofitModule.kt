@@ -41,7 +41,8 @@ class RetrofitModule {
     ): ApiClient =
         ApiClient(
             baseUrl = ctx.getString(R.string.baseUrl),
-            okHttpClientBuilder = OkHttpClient.Builder().addInterceptor(logger)
+            okHttpClientBuilder = OkHttpClient.Builder().addInterceptor(logger),
+            authNames = arrayOf("bearerAuth")
         )
 
     @Provides

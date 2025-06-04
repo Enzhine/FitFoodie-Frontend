@@ -4,6 +4,7 @@ import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import android.widget.EditText
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -27,10 +28,7 @@ class PrefsFragment : Fragment(R.layout.fragment_prefs) {
         b.profileToolbar.setOnMenuItemClickListener { item ->
             when (item.itemId) {
                 R.id.action_exit -> {
-                    lifecycleScope.launch {
-                        vm.resetCredentials()
-                        navigateStart()
-                    }
+                    showExitDialog()
                     true
                 }
 
@@ -113,6 +111,21 @@ class PrefsFragment : Fragment(R.layout.fragment_prefs) {
                 }
             }
         }
+    }
+
+    private fun showExitDialog() {
+        val ctx = requireContext()
+
+        AlertDialog.Builder(ctx)
+            .setTitle(getString(R.string.exit_warning))
+            .setPositiveButton(getString(R.string.exit_accept)) { _, _ ->
+                lifecycleScope.launch {
+                    vm.resetCredentials()
+                    navigateStart()
+                }
+            }
+            .setNegativeButton(getString(R.string.btn_cancel), null)
+            .show()
     }
 
     private fun navigateStart() {

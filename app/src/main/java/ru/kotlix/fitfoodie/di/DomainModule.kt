@@ -61,8 +61,7 @@ class DomainModule {
     @Provides
     @Singleton
     fun provideUserRelativeTagsProvider(
-        @ApplicationContext ctx: Context,
         userPreferencesStorage: UserPreferencesStorage,
     ): UserRelativeTagsProvider =
-        UserRelativeTagsProviderImpl(ctx, userPreferencesStorage)
+        UserRelativeTagsProviderImpl(userPreferencesStorage)
 }

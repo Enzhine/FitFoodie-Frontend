@@ -1,17 +1,20 @@
 package ru.kotlix.fitfoodie.presentation.adapter
 
+import android.content.res.ColorStateList
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.google.android.material.card.MaterialCardView
 import ru.kotlix.fitfoodie.R
 import ru.kotlix.fitfoodie.domain.dto.DishShort
 import ru.kotlix.fitfoodie.domain.dto.Product
+import ru.kotlix.fitfoodie.mapper.toLocalizedName
 import ru.kotlix.fitfoodie.presentation.viewmodel.DishesFragmentViewModel
 import ru.kotlix.fitfoodie.presentation.viewmodel.ProductsFragmentViewModel
 
@@ -35,12 +38,24 @@ class DishAdapter(
                 .into(image)
 
             title.text = dish.title
-            tags.text = dish.tags.joinToString(", ")
-            description.text = "${dish.calories}kk ${dish.cookMinutes}min"
+            tags.text = dish.tags.joinToString(", ") { it.toLocalizedName(itemView.context) }
+            description.text = "${dish.calories} ${itemView.context.getString(R.string.unit_cal)} ${dish.cookMinutes} ${itemView.context.getString(R.string.unit_min)}"
             if (dish.order > 0) {
                 indicator.setImageResource(R.drawable.ic_circle_check)
+                indicator.imageTintList = ColorStateList.valueOf(
+                    ContextCompat.getColor(
+                        itemView.context,
+                        R.color.fitfoodie_green
+                    )
+                )
             } else {
                 indicator.setImageResource(R.drawable.ic_circle_cross)
+                indicator.imageTintList = ColorStateList.valueOf(
+                    ContextCompat.getColor(
+                        itemView.context,
+                        R.color.gorgeous_red
+                    )
+                )
             }
 
             card.setOnClickListener { callback(dish) }

@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import ru.kotlix.fitfoodie.R
 import ru.kotlix.fitfoodie.domain.dto.Product
+import ru.kotlix.fitfoodie.mapper.toLocalizedName
 import ru.kotlix.fitfoodie.presentation.viewmodel.ProductsFragmentViewModel
 
 class ProductRAdapter(
@@ -22,7 +23,6 @@ class ProductRAdapter(
         private val title: TextView = itemView.findViewById(R.id.productsItemName)
         private val image: ImageView = itemView.findViewById(R.id.productsItemImage)
         private val quantity: TextView = itemView.findViewById(R.id.productsItemQuantity)
-        private val quant: TextView = itemView.findViewById(R.id.productsItemQuant)
 
         private val indicator: ImageView = itemView.findViewById(R.id.productsItemIndicator)
 
@@ -38,8 +38,7 @@ class ProductRAdapter(
             val requiredQuantity = product.requiredQuantity ?: -1
 
             title.text = product.title
-            quantity.text = "${product.quantity} ${product.unit}"
-            quant.text = "${product.quant} ${product.unit} / $requiredQuantity ${product.unit}"
+            quantity.text = "${product.quant} ${product.unit.toLocalizedName(itemView.context)} / $requiredQuantity ${product.unit.toLocalizedName(itemView.context)}"
 
             if (product.quantity > requiredQuantity) {
                 indicator.setImageResource(R.drawable.ic_circle_check)

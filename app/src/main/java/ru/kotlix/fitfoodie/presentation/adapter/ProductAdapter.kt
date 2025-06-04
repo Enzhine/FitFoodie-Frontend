@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import ru.kotlix.fitfoodie.R
 import ru.kotlix.fitfoodie.domain.dto.Product
+import ru.kotlix.fitfoodie.mapper.toLocalizedName
 import ru.kotlix.fitfoodie.presentation.viewmodel.ProductsFragmentViewModel
 
 class ProductAdapter(
@@ -32,12 +33,12 @@ class ProductAdapter(
                 .into(image)
 
             title.text = product.title
-            quantity.text = "${product.quantity} ${product.unit}"
-            quant.text = "${product.quant} ${product.unit}"
+            quantity.text = "${product.quantity} ${product.unit.toLocalizedName(itemView.context)}"
+            quant.text = "${product.quant} ${product.unit.toLocalizedName(itemView.context)}"
 
             inc.setOnClickListener {
                 product.quantity += product.quant
-                quantity.text = "${product.quantity} ${product.unit}"
+                quantity.text = "${product.quantity} ${product.unit.toLocalizedName(itemView.context)}"
                 productsFragmentViewModel.updateProduct(product)
             }
             dec.setOnClickListener {
@@ -45,7 +46,7 @@ class ProductAdapter(
                 if (product.quantity <= 0) {
                     product.quantity = 0
                 }
-                quantity.text = "${product.quantity} ${product.unit}"
+                quantity.text = "${product.quantity} ${product.unit.toLocalizedName(itemView.context)}"
                 productsFragmentViewModel.updateProduct(product)
             }
         }

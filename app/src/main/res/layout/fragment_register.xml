@@ -46,7 +46,7 @@
                 app:boxCornerRadiusBottomEnd="24dp"
                 app:boxCornerRadiusBottomStart="24dp"
                 app:boxCornerRadiusTopEnd="24dp"
-                app:boxCornerRadiusTopStart="24dp">
+                app:boxCornerRadiusTopStart="24dp" >
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/etName"

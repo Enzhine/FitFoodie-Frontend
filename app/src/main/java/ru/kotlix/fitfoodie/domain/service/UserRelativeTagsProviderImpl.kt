@@ -1,18 +1,16 @@
 package ru.kotlix.fitfoodie.domain.service
 
-import android.content.Context
-import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import ru.kotlix.fitfoodie.domain.dto.CategoryTag
-import ru.kotlix.fitfoodie.domain.dto.Product
 import ru.kotlix.fitfoodie.domain.dto.UserPreferences
 import javax.inject.Inject
 
 class UserRelativeTagsProviderImpl @Inject constructor(
-    @ApplicationContext
-    private val ctx: Context,
     private val userPreferencesStorage: UserPreferencesStorage,
 ) : UserRelativeTagsProvider {
+
+    override var updated: Flow<Boolean> = userPreferencesStorage.updated
 
     private fun mapPreferencesToExcluded(up: UserPreferences): Set<CategoryTag> {
         val excl = mutableSetOf<CategoryTag>()

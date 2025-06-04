@@ -4,6 +4,8 @@ import kotlinx.coroutines.flow.Flow
 import ru.kotlix.fitfoodie.domain.dto.UserPreferences
 
 interface UserPreferencesStorage {
+    val updated: Flow<Boolean>
+
     fun get(userId: Int? = null): Flow<UserPreferences?>
 
     suspend fun save(userPreferences: UserPreferences, userId: Int? = null)

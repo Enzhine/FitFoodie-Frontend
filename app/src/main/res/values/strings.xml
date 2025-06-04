@@ -53,4 +53,16 @@
     <string name="calcProductsAction">Рассчитать</string>
     <string name="tabProductsRequired">Необходимые продукты</string>
     <string name="productsCalcDishesNotSelected">Вы не выбрали блюда</string>
+    <string name="exit_warning">Подтвердите действие</string>
+    <string name="exit_accept">Выйти</string>
+    <string name="unit_g">г.</string>
+    <string name="unit_ml">мл.</string>
+    <string name="unit_items">шт.</string>
+    <string name="unit_tsp">чайн.л.</string>
+    <string name="unit_tbsp">стол.л.</string>
+    <string name="unit_cal">кал.</string>
+    <string name="unit_min">минут</string>
+    <string name="category_meat">мясное</string>
+    <string name="category_fish">рыба</string>
+    <string name="category_milk">молочное</string>
 </resources>

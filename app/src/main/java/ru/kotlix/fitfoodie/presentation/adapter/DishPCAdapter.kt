@@ -12,6 +12,7 @@ import com.google.android.material.card.MaterialCardView
 import ru.kotlix.fitfoodie.R
 import ru.kotlix.fitfoodie.domain.dto.DishShort
 import ru.kotlix.fitfoodie.domain.dto.Product
+import ru.kotlix.fitfoodie.mapper.toLocalizedName
 import ru.kotlix.fitfoodie.presentation.viewmodel.DishesFragmentViewModel
 import ru.kotlix.fitfoodie.presentation.viewmodel.ProductsFragmentViewModel
 
@@ -35,8 +36,8 @@ class DishPCAdapter(
                 .into(image)
 
             title.text = dish.title
-            tags.text = dish.tags.joinToString(", ") { it.name }
-            description.text = "${dish.calories}kk ${dish.cookMinutes}min"
+            tags.text = dish.tags.joinToString(", ") { it.toLocalizedName(itemView.context) }
+            description.text = "${dish.calories} ${itemView.context.getString(R.string.unit_cal)} ${dish.cookMinutes} ${itemView.context.getString(R.string.unit_min)}"
 
             infoBtn.setOnClickListener { callback(dish) }
             selectBtn.setOnClickListener {
