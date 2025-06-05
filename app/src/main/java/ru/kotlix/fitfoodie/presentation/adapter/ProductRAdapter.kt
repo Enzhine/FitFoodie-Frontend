@@ -38,9 +38,9 @@ class ProductRAdapter(
             val requiredQuantity = product.requiredQuantity ?: -1
 
             title.text = product.title
-            quantity.text = "${product.quant} ${product.unit.toLocalizedName(itemView.context)} / $requiredQuantity ${product.unit.toLocalizedName(itemView.context)}"
+            quantity.text = "${product.quantity} ${product.unit.toLocalizedName(itemView.context)} / $requiredQuantity ${product.unit.toLocalizedName(itemView.context)}"
 
-            if (product.quantity > requiredQuantity) {
+            if (product.quantity >= requiredQuantity) {
                 indicator.setImageResource(R.drawable.ic_circle_check)
                 indicator.imageTintList = ColorStateList.valueOf(
                     ContextCompat.getColor(
